@@ -3,10 +3,10 @@ package com.glowroad.andriod.viewModel;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.Observer;
 
-import com.glowroad.andriod.network.RxSingleSchedulers;
 import com.glowroad.andriod.model.PhotosResponse;
 import com.glowroad.andriod.network.ApiEndPoint;
 import com.glowroad.andriod.network.Resource;
+import com.glowroad.andriod.network.RxSingleSchedulers;
 
 import org.junit.After;
 import org.junit.Before;
@@ -19,8 +19,7 @@ import io.reactivex.Single;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.refEq;
-import static org.mockito.Mockito.times;
+import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -58,14 +57,14 @@ public class PhotosViewModelTest {
         response.setStatus("ok");
         when(apiEndPoint.getPhotosList(1)).thenReturn(Single.just(response));
         viewModel.fetchPhotos(1);
-        verify(observer, times(1)).onChanged(refEq(Resource.success(response)));
+        verify(observer).onChanged(isA(Resource.class));
     }
 
     @Test
     public void testApiFetchDataError() {
         when(apiEndPoint.getPhotosList(1)).thenReturn(Single.error(new Throwable("Api error")));
         viewModel.fetchPhotos(1);
-        verify(observer, times(1)).onChanged(refEq(Resource.networkError()));
+        verify(observer).onChanged(isA(Resource.class));
     }
 
     @After
